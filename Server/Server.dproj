@@ -136,7 +136,7 @@
         </DCCReference>
         <DCCReference Include="Utils\uChatGPT.pas"/>
         <DCCReference Include="Utils\uClaude.pas"/>
-        <DCCReference Include="uAIProvider.pas"/>
+        <DCCReference Include="Utils\uAIProvider.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

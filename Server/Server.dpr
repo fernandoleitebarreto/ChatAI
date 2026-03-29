@@ -6,7 +6,7 @@ uses
   Dm.Main in 'Dm.Main.pas' {Dm: TDataModule},
   uChatGPT in 'Utils\uChatGPT.pas',
   uClaude in 'Utils\uClaude.pas',
-  uAIProvider in 'uAIProvider.pas';
+  uAIProvider in 'Utils\uAIProvider.pas';
 
 {$R *.res}
 
