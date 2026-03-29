@@ -1,1 +1,9 @@
-/Servidor/Utils/__history
+/Client/*.res
+/Client/Win32/Debug
+/Client/Win64/Debug
+/Client/__history
+/Server/__history
+/Server/*.res
+/Server/Win32/Debug/
+/Server/Win64/Debug/
+/Client/Utils/__history

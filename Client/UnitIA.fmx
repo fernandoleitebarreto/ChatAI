@@ -1,7 +1,7 @@
 object FrmIA: TFrmIA
   Left = 0
   Top = 0
-  Caption = 'Assistente IA'
+  Caption = 'AI Assistant'
   ClientHeight = 592
   ClientWidth = 744
   Fill.Kind = Solid
@@ -56,7 +56,7 @@ object FrmIA: TFrmIA
           TextSettings.Font.Size = 20.000000000000000000
           TextSettings.Font.StyleExt = {00060000000000000004000000}
           TextSettings.HorzAlign = Center
-          Text = 'An'#225'lise com Intelig'#234'ncia Artificial'
+          Text = 'Analysis with Artificial Intelligence'
           TabOrder = 1
         end
         object mPrompt: TMemo
@@ -286,8 +286,8 @@ object FrmIA: TFrmIA
           TextSettings.FontColor = xFF8E8E8E
           TextSettings.HorzAlign = Center
           Text = 
-            'Use o poder da intelig'#234'ncia artificial para obter dados, an'#225'lise' +
-            's gerenciais e insights sobre seu neg'#243'cio.'
+            'Use the power of artificial intelligence to obtain data, managem' +
+            'ent analytics, and insights about your business.'
           TabOrder = 0
         end
         object Layout2: TLayout

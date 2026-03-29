@@ -1,12 +1,4 @@
-unit uAIProvider;
-
-/////////////////////////////////////////////////////////////////////////////
-{
-    Unit uAIProvider
-    Interface-based abstraction for AI providers (ChatGPT, Claude, etc.)
-    Based on the ChatAI project structure - 99 Coders
-}
-/////////////////////////////////////////////////////////////////////////////
+﻿unit uAIProvider;
 
 interface
 

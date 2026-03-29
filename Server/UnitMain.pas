@@ -35,11 +35,9 @@ uses
 // Body  : { "prompt": "..." }
 // Returns the TJSONObject produced by TDm.ProcessPrompt
 // ---------------------------------------------------------------------------
-procedure HandlePrompt(AReq : THorseRequest;
-                       ARes : THorseResponse;
-                       ANext: TProc);
+procedure HandlePrompt(AReq: THorseRequest; ARes: THorseResponse; ANext: TProc);
 var
-  LDm    : TDm;
+  LDm: TDm;
   LPrompt: string;
 begin
   LDm := TDm.Create(nil);

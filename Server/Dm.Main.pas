@@ -38,14 +38,14 @@ implementation
 const
   // Store API keys in environment variables or a secure config file —
   // never hard-code them in source code that is committed to version control.
-  AI_PROVIDER_TYPE = aptClaude;   // Switch to aptChatGPT to use OpenAI
-  AI_API_KEY       = '';          // Set at runtime or load from config
+  AI_PROVIDER_TYPE = aptClaude; // Switch to aptChatGPT to use OpenAI
+  AI_API_KEY = ''; // Set at runtime or load from config
 
 procedure TDm.DataModuleCreate(Sender: TObject);
 begin
   // SQLite — database file path can be adjusted as needed
   Conn.Params.Database := ExtractFilePath(ParamStr(0)) + 'data.db';
-  Conn.Connected       := True;
+  Conn.Connected := True;
 end;
 
 function TDm.GetAIProvider: IAIProvider;
@@ -58,7 +58,7 @@ var
   LProvider: IAIProvider;
 begin
   LProvider := GetAIProvider;
-  Result    := LProvider.Send(APrompt);
+  Result := LProvider.Send(APrompt);
   // No manual Free needed — IAIProvider is reference-counted
 end;
 
