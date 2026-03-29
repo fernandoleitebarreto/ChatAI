@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2021/11/16 11:08:17.000.563,=C:\Users\INTEL\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2021/11/16 12:50:48.000.217,=C:\Users\INTEL\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2022/12/19 15:32:32.000.701,=C:\Users\INTEL\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2026/03/16 14:47:41.000.232,=C:\Users\INTEL\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2026/03/16 21:02:43.000.763,=C:\Users\INTEL\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2026/03/16 21:03:03.000.053,C:\Users\INTEL\Documents\Embarcadero\Studio\Projects\Unit1.pas=D:\99Coders\Posts\459 - Feature incrível com IA para seus sistemas Delphi\Fontes\Cliente\UnitPrincipal.pas</Transaction>
+    <Transaction>2026/03/16 21:03:03.000.053,C:\Users\INTEL\Documents\Embarcadero\Studio\Projects\Unit1.fmx=D:\99Coders\Posts\459 - Feature incrível com IA para seus sistemas Delphi\Fontes\Cliente\UnitPrincipal.fmx</Transaction>
+    <Transaction>2026/03/16 21:03:09.000.401,C:\Users\INTEL\Documents\Embarcadero\Studio\Projects\Project1.dproj=D:\99Coders\Posts\459 - Feature incrível com IA para seus sistemas Delphi\Fontes\Cliente\ERP.dproj</Transaction>
+    <Transaction>2026/03/16 21:04:19.000.619,=D:\99Coders\Posts\459 - Feature incrível com IA para seus sistemas Delphi\Fontes\Cliente\Unit2.pas</Transaction>
+    <Transaction>2026/03/16 21:04:24.000.878,D:\99Coders\Posts\459 - Feature incrível com IA para seus sistemas Delphi\Fontes\Cliente\Unit2.pas=D:\99Coders\Posts\459 - Feature incrível com IA para seus sistemas Delphi\Fontes\Cliente\UnitIA.pas</Transaction>
+    <Transaction>2026/03/16 21:04:24.000.878,D:\99Coders\Posts\459 - Feature incrível com IA para seus sistemas Delphi\Fontes\Cliente\Unit2.fmx=D:\99Coders\Posts\459 - Feature incrível com IA para seus sistemas Delphi\Fontes\Cliente\UnitIA.fmx</Transaction>
+    <Transaction>2026/03/16 21:08:08.000.046,=D:\99Coders\Posts\459 - Feature incrível com IA para seus sistemas Delphi\Fontes\Cliente\Utils\uLoading.pas</Transaction>
+  </Transactions>
+	<ActiveMobileDevice>
+		<PMacMini iOSSimulator="iPhone5"/>
+	</ActiveMobileDevice>
+</BorlandProject>

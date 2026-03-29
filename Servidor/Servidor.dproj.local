@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2021/11/16 11:08:17.000.563,=C:\Users\INTEL\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2021/11/16 12:50:48.000.217,=C:\Users\INTEL\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2022/12/19 15:32:32.000.701,=C:\Users\INTEL\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2026/03/16 14:47:41.000.232,=C:\Users\INTEL\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2026/03/16 20:24:50.000.128,=C:\Users\INTEL\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2026/03/16 20:25:01.000.793,C:\Users\INTEL\Documents\Embarcadero\Studio\Projects\Unit1.pas=D:\99Coders\Posts\459 - Feature incrível com IA para seus sistemas Delphi\Fontes\Servidor\UnitPrincipal.pas</Transaction>
+    <Transaction>2026/03/16 20:25:01.000.793,C:\Users\INTEL\Documents\Embarcadero\Studio\Projects\Unit1.dfm=D:\99Coders\Posts\459 - Feature incrível com IA para seus sistemas Delphi\Fontes\Servidor\UnitPrincipal.dfm</Transaction>
+    <Transaction>2026/03/16 20:25:07.000.737,C:\Users\INTEL\Documents\Embarcadero\Studio\Projects\Project1.dproj=D:\99Coders\Posts\459 - Feature incrível com IA para seus sistemas Delphi\Fontes\Servidor\Servidor.dproj</Transaction>
+    <Transaction>2026/03/16 20:28:48.000.311,=D:\99Coders\Posts\459 - Feature incrível com IA para seus sistemas Delphi\Fontes\Servidor\Unit1.pas</Transaction>
+    <Transaction>2026/03/16 20:29:00.000.200,D:\99Coders\Posts\459 - Feature incrível com IA para seus sistemas Delphi\Fontes\Servidor\Unit1.pas=D:\99Coders\Posts\459 - Feature incrível com IA para seus sistemas Delphi\Fontes\Servidor\Dm.Geral.pas</Transaction>
+    <Transaction>2026/03/16 20:29:00.000.200,D:\99Coders\Posts\459 - Feature incrível com IA para seus sistemas Delphi\Fontes\Servidor\Unit1.dfm=D:\99Coders\Posts\459 - Feature incrível com IA para seus sistemas Delphi\Fontes\Servidor\Dm.Geral.dfm</Transaction>
+    <Transaction>2026/03/16 20:41:13.000.641,=D:\99Coders\Posts\459 - Feature incrível com IA para seus sistemas Delphi\Fontes\Servidor\Utils\uChatGPT.pas</Transaction>
+  </Transactions>
+	<ActiveMobileDevice>
+		<PMacMini iOSSimulator="iPhone5"/>
+	</ActiveMobileDevice>
+</BorlandProject>
