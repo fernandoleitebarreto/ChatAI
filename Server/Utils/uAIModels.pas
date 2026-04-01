@@ -32,7 +32,7 @@ type
   // ---------------------------------------------------------------------------
   // Anthropic (Claude) models
   // ---------------------------------------------------------------------------
-  TClaudeModel = (cmSonnet4, cmOpus4, cmHaiku35);
+  TClaudeModel = (cmOpus46, cmSonnet46, cmHaiku45);
   TClaudeModelHelper = record helper for TClaudeModel
     function Name: string;
     function ApiName: string;
@@ -160,9 +160,9 @@ end;
 function TClaudeModelHelper.Name: string;
 begin
   case Self of
-    cmSonnet4 : Result := 'Claude Sonnet 4';
-    cmOpus4   : Result := 'Claude Opus 4';
-    cmHaiku35 : Result := 'Claude Haiku 3.5';
+    cmOpus46   : Result := 'Claude Opus 4.6';
+    cmSonnet46 : Result := 'Claude Sonnet 4.6';
+    cmHaiku45  : Result := 'Claude Haiku 4.5';
   else
     Result := 'Unknown';
   end;
@@ -171,9 +171,9 @@ end;
 function TClaudeModelHelper.ApiName: string;
 begin
   case Self of
-    cmSonnet4 : Result := 'claude-sonnet-4-20250514';
-    cmOpus4   : Result := 'claude-opus-4-20250514';
-    cmHaiku35 : Result := 'claude-3-5-haiku-20241022';
+    cmOpus46   : Result := 'claude-opus-4-6';
+    cmSonnet46 : Result := 'claude-sonnet-4-6';
+    cmHaiku45  : Result := 'claude-haiku-4-5-20251001';
   else
     Result := '';
   end;
@@ -181,17 +181,17 @@ end;
 
 class function TClaudeModelHelper.Default: TClaudeModel;
 begin
-  Result := cmHaiku35;
+  Result := cmSonnet46;
 end;
 
 class function TClaudeModelHelper.FromApiName(const AName: string): TClaudeModel;
 begin
-  if SameText(AName, 'claude-sonnet-4-20250514')
-    then Result := cmSonnet4
-  else if SameText(AName, 'claude-opus-4-20250514')
-    then Result := cmOpus4
-  else if SameText(AName, 'claude-3-5-haiku-20241022')
-    then Result := cmHaiku35
+  if SameText(AName, 'claude-opus-4-6')
+    then Result := cmOpus46
+  else if SameText(AName, 'claude-sonnet-4-6')
+    then Result := cmSonnet46
+  else if SameText(AName, 'claude-haiku-4-5-20251001')
+    then Result := cmHaiku45
   else
     raise Exception.CreateFmt('Unknown Claude model: "%s"', [AName]);
 end;
