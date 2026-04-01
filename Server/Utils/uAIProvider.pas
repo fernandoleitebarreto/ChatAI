@@ -4,32 +4,11 @@ interface
 
 uses
   System.SysUtils, System.JSON,
-  RESTRequest4D;
+  RESTRequest4D,
+  uAIModels,
+  uAIProviderIntf;
 
 type
-
-  // ---------------------------------------------------------------------------
-  // Base interface for any AI provider
-  // ---------------------------------------------------------------------------
-  IAIProvider = interface
-    ['{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}']
-
-    // Sends a prompt and returns JSON in the format:
-    // { "type": "text"|"array", "data": ... }
-    function Send(const APrompt: string): TJSONObject;
-
-    // Common configuration getters and setters
-    function GetModel: string;
-    function GetMaxTokens: Integer;
-    function GetSystemPrompt: string;
-    procedure SetModel(const AValue: string);
-    procedure SetMaxTokens(const AValue: Integer);
-    procedure SetSystemPrompt(const AValue: string);
-
-    property Model       : string  read GetModel        write SetModel;
-    property MaxTokens   : Integer read GetMaxTokens    write SetMaxTokens;
-    property SystemPrompt: string  read GetSystemPrompt write SetSystemPrompt;
-  end;
 
   // ---------------------------------------------------------------------------
   // Abstract base class — implements the shared interface contract.
@@ -81,39 +60,9 @@ type
   end;
 
   // ---------------------------------------------------------------------------
-  // OpenAI (ChatGPT) provider implementation
-  // ---------------------------------------------------------------------------
-  TChatGPTProvider = class(TAIProviderBase)
-  protected
-    function BuildRequestBody(const APrompt: string): TJSONObject; override;
-    function ExtractTextFromResponse(const AJson: TJSONObject): string; override;
-    function GetBaseURL: string; override;
-    function GetResource: string; override;
-    procedure AddHeaders(const ARequest: IRequest); override;
-  public
-    constructor Create(const AApiKey: string); override;
-  end;
-
-  // ---------------------------------------------------------------------------
-  // Anthropic (Claude) provider implementation
-  // ---------------------------------------------------------------------------
-  TClaudeProvider = class(TAIProviderBase)
-  protected
-    function BuildRequestBody(const APrompt: string): TJSONObject; override;
-    function ExtractTextFromResponse(const AJson: TJSONObject): string; override;
-    function GetBaseURL: string; override;
-    function GetResource: string; override;
-    procedure AddHeaders(const ARequest: IRequest); override;
-  public
-    constructor Create(const AApiKey: string); override;
-  end;
-
-  // ---------------------------------------------------------------------------
   // Factory — creates the correct provider without the caller knowing the
   // concrete classes
   // ---------------------------------------------------------------------------
-  TAIProviderType = (aptChatGPT, aptClaude);
-
   TAIProviderFactory = class
   public
     class function Create(const AType  : TAIProviderType;
@@ -121,6 +70,9 @@ type
   end;
 
 implementation
+
+uses
+  uChatGPTProvider, uClaudeProvider;
 
 const
   // Shared system prompt: instructs any LLM to return JSON in the format
@@ -138,18 +90,6 @@ const
     '{"type":"text","data":"Revenue grew 12% in the last quarter."} ' +
     '{"type":"array","data":[{"Product":"Widget","Sales":"150"},{"Product":"Gadget","Sales":"89"}]}';
 
-  // ChatGPT endpoint
-  CHATGPT_BASE_URL   = 'https://api.openai.com';
-  CHATGPT_RESOURCE   = 'v1/chat/completions';
-  CHATGPT_DEF_MODEL  = 'gpt-4o';
-  CHATGPT_DEF_TOKENS = 1024;
-
-  // Claude endpoint
-  CLAUDE_BASE_URL    = 'https://api.anthropic.com';
-  CLAUDE_RESOURCE    = 'v1/messages';
-  CLAUDE_API_VERSION = '2023-06-01';
-  CLAUDE_DEF_MODEL   = 'claude-sonnet-4-20250514';
-  CLAUDE_DEF_TOKENS  = 1024;
 
 { TAIProviderBase }
 
@@ -160,13 +100,35 @@ begin
   FSystemPrompt := SHARED_SYSTEM_PROMPT;
 end;
 
-function TAIProviderBase.GetModel: string;        begin Result := FModel;        end;
-function TAIProviderBase.GetMaxTokens: Integer;   begin Result := FMaxTokens;    end;
-function TAIProviderBase.GetSystemPrompt: string; begin Result := FSystemPrompt; end;
+function TAIProviderBase.GetModel: string;
+begin
+  Result := FModel;
+end;
 
-procedure TAIProviderBase.SetModel(const AValue: string);        begin FModel        := AValue; end;
-procedure TAIProviderBase.SetMaxTokens(const AValue: Integer);   begin FMaxTokens    := AValue; end;
-procedure TAIProviderBase.SetSystemPrompt(const AValue: string); begin FSystemPrompt := AValue; end;
+function TAIProviderBase.GetMaxTokens: Integer;
+begin
+  Result := FMaxTokens;
+end;
+
+function TAIProviderBase.GetSystemPrompt: string;
+begin
+  Result := FSystemPrompt;
+end;
+
+procedure TAIProviderBase.SetModel(const AValue: string);
+begin
+  FModel := AValue;
+end;
+
+procedure TAIProviderBase.SetMaxTokens(const AValue: Integer);
+begin
+  FMaxTokens := AValue;
+end;
+
+procedure TAIProviderBase.SetSystemPrompt(const AValue: string);
+begin
+  FSystemPrompt := AValue;
+end;
 
 function TAIProviderBase.ParseAIText(const AText: string): TJSONObject;
 var
@@ -226,119 +188,6 @@ begin
   finally
     LBody.Free;
   end;
-end;
-
-{ TChatGPTProvider }
-
-constructor TChatGPTProvider.Create(const AApiKey: string);
-begin
-  inherited Create(AApiKey);
-  FModel     := CHATGPT_DEF_MODEL;
-  FMaxTokens := CHATGPT_DEF_TOKENS;
-end;
-
-function TChatGPTProvider.GetBaseURL: string;  begin Result := CHATGPT_BASE_URL; end;
-function TChatGPTProvider.GetResource: string; begin Result := CHATGPT_RESOURCE; end;
-
-procedure TChatGPTProvider.AddHeaders(const ARequest: IRequest);
-begin
-  ARequest
-    .AddHeader('Authorization', 'Bearer ' + ApiKey)
-    .AddHeader('Content-Type',  'application/json');
-end;
-
-function TChatGPTProvider.BuildRequestBody(const APrompt: string): TJSONObject;
-var
-  LMessages: TJSONArray;
-  LSystem  : TJSONObject;
-  LUser    : TJSONObject;
-begin
-  LMessages := TJSONArray.Create;
-
-  LSystem := TJSONObject.Create;
-  LSystem.AddPair('role',    'system');
-  LSystem.AddPair('content', FSystemPrompt);
-  LMessages.AddElement(LSystem);
-
-  LUser := TJSONObject.Create;
-  LUser.AddPair('role',    'user');
-  LUser.AddPair('content', APrompt);
-  LMessages.AddElement(LUser);
-
-  Result := TJSONObject.Create;
-  Result.AddPair('model',      FModel);
-  Result.AddPair('max_tokens', TJSONNumber.Create(FMaxTokens));
-  Result.AddPair('messages',   LMessages);
-end;
-
-function TChatGPTProvider.ExtractTextFromResponse(const AJson: TJSONObject): string;
-var
-  LChoices: TJSONArray;
-  LMessage: TJSONObject;
-begin
-  // Response format: { "choices": [ { "message": { "content": "..." } } ] }
-  LChoices := AJson.GetValue<TJSONArray>('choices');
-
-  if (LChoices = nil) or (LChoices.Count = 0) then
-    raise Exception.Create('ChatGPT API response does not contain choices.');
-
-  LMessage := (LChoices.Items[0] as TJSONObject).GetValue<TJSONObject>('message');
-  Result   := LMessage.GetValue<string>('content');
-end;
-
-{ TClaudeProvider }
-
-constructor TClaudeProvider.Create(const AApiKey: string);
-begin
-  inherited Create(AApiKey);
-  FModel     := CLAUDE_DEF_MODEL;
-  FMaxTokens := CLAUDE_DEF_TOKENS;
-end;
-
-function TClaudeProvider.GetBaseURL: string;  begin Result := CLAUDE_BASE_URL; end;
-function TClaudeProvider.GetResource: string; begin Result := CLAUDE_RESOURCE; end;
-
-procedure TClaudeProvider.AddHeaders(const ARequest: IRequest);
-begin
-  ARequest
-    .AddHeader('x-api-key',         ApiKey)
-    .AddHeader('anthropic-version', CLAUDE_API_VERSION)
-    .AddHeader('Content-Type',      'application/json');
-end;
-
-function TClaudeProvider.BuildRequestBody(const APrompt: string): TJSONObject;
-var
-  LMessages: TJSONArray;
-  LUser    : TJSONObject;
-begin
-  LMessages := TJSONArray.Create;
-
-  LUser := TJSONObject.Create;
-  LUser.AddPair('role',    'user');
-  LUser.AddPair('content', APrompt);
-  LMessages.AddElement(LUser);
-
-  // Claude receives the system prompt as a top-level field, not inside messages
-  Result := TJSONObject.Create;
-  Result.AddPair('model',      FModel);
-  Result.AddPair('max_tokens', TJSONNumber.Create(FMaxTokens));
-  Result.AddPair('system',     FSystemPrompt);
-  Result.AddPair('messages',   LMessages);
-end;
-
-function TClaudeProvider.ExtractTextFromResponse(const AJson: TJSONObject): string;
-var
-  LContent   : TJSONArray;
-  LFirstBlock: TJSONObject;
-begin
-  // Response format: { "content": [ { "type": "text", "text": "..." } ] }
-  LContent := AJson.GetValue<TJSONArray>('content');
-
-  if (LContent = nil) or (LContent.Count = 0) then
-    raise Exception.Create('Claude API response does not contain content blocks.');
-
-  LFirstBlock := LContent.Items[0] as TJSONObject;
-  Result      := LFirstBlock.GetValue<string>('text');
 end;
 
 { TAIProviderFactory }
