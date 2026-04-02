@@ -76,7 +76,7 @@ uses
 
 const
   // Shared system prompt: instructs any LLM to return JSON in the format
-  // expected by the FrmIA client form
+  // expected by the FrmAI client form
   SHARED_SYSTEM_PROMPT =
     'You are a business intelligence assistant integrated into an ERP system. ' +
     'Always respond EXCLUSIVELY in JSON format, with no text outside the JSON ' +

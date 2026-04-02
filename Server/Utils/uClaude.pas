@@ -3,7 +3,7 @@
 /// //////////////////////////////////////////////////////////////////////////
 {
   Unit uClaude
-  Integração com a API da Anthropic (Claude)
+  Integration with the Anthropic API (Claude)
 }
 /// //////////////////////////////////////////////////////////////////////////
 
@@ -26,7 +26,7 @@ type
   public
     constructor Create(const AApiKey: string);
 
-    function Enviar(const APrompt: string): TJSONObject;
+    function Send(const APrompt: string): TJSONObject;
 
     property Model: string read FModel write FModel;
     property MaxTokens: Integer read FMaxTokens write FMaxTokens;
@@ -42,20 +42,20 @@ const
   DEFAULT_MODEL = 'claude-sonnet-4-20250514';
   DEFAULT_MAX_TOKENS = 1024;
 
-  // System prompt padrão que instrui o Claude a retornar JSON estruturado
-  // para que o cliente (FrmIA) possa decidir como exibir: texto ou tabela
+  // Default system prompt that instructs Claude to return structured JSON
+  // so that the client (FrmAI) can decide how to display it: text or table
   DEFAULT_SYSTEM_PROMPT =
-    'Você é um assistente de análise gerencial integrado a um sistema ERP. ' +
-    'Sempre responda EXCLUSIVAMENTE em formato JSON, sem texto fora do JSON, ' +
-    'sem blocos de código markdown. ' +
-    'O JSON deve ter obrigatoriamente a chave "tipo" e a chave "dados". ' +
-    'Use "tipo": "texto" quando a resposta for um texto descritivo — nesse caso '
-    + '"dados" deve ser uma string. ' +
-    'Use "tipo": "array" quando a resposta for uma lista/tabela — nesse caso ' +
-    '"dados" deve ser um array de objetos JSON com as mesmas chaves em todos os itens. '
-    + 'Exemplos: ' +
-    '{"tipo":"texto","dados":"O faturamento cresceu 12% no último trimestre."} '
-    + '{"tipo":"array","dados":[{"Produto":"Widget","Vendas":"150"},{"Produto":"Gadget","Vendas":"89"}]}';
+    'You are a business intelligence assistant integrated into an ERP system. ' +
+    'Always respond EXCLUSIVELY in JSON format, with no text outside the JSON ' +
+    'and no markdown code blocks. ' +
+    'The JSON must always contain the keys "type" and "data". ' +
+    'Use "type": "text" when the answer is descriptive — in that case ' +
+    '"data" must be a string. ' +
+    'Use "type": "array" when the answer is a list/table — in that case ' +
+    '"data" must be an array of JSON objects with the same keys in every item. ' +
+    'Examples: ' +
+    '{"type":"text","data":"Revenue grew 12% in the last quarter."} ' +
+    '{"type":"array","data":[{"Product":"Widget","Sales":"150"},{"Product":"Gadget","Sales":"89"}]}';
 
   { TClaude }
 
@@ -73,7 +73,7 @@ var
   LMessages: TJSONArray;
   LMessage: TJSONObject;
 begin
-  // Monta o corpo da requisição conforme a API Messages da Anthropic
+  // Build the request body according to the Anthropic Messages API
   // Docs: https://docs.anthropic.com/en/api/messages
 
   LMessages := TJSONArray.Create;
@@ -97,34 +97,34 @@ var
   LText: string;
   LParsed: TJSONValue;
 begin
-  // A resposta da API tem o formato:
+  // The API response has the format:
   // { "content": [ { "type": "text", "text": "..." } ], ... }
 
   LContent := AJson.GetValue<TJSONArray>('content');
 
   if (LContent = nil) or (LContent.Count = 0) then
-    raise Exception.Create('Resposta da API do Claude não contém conteúdo.');
+    raise Exception.Create('Claude API response contains no content.');
 
   LFirstBlock := LContent.Items[0] as TJSONObject;
   LText := LFirstBlock.GetValue<string>('text');
 
-  // O system prompt instrui o Claude a retornar JSON puro.
-  // Faz o parse do texto recebido para TJSONObject.
+  // The system prompt instructs Claude to return pure JSON.
+  // Parse the received text into a TJSONObject.
   LParsed := TJSONObject.ParseJSONValue(LText);
 
   if not(LParsed is TJSONObject) then
   begin
-    // Segurança: se por algum motivo não vier JSON, encapsula como texto
+    // Safety: if for any reason the response is not JSON, wrap it as text
     LParsed.Free;
     Result := TJSONObject.Create;
-    Result.AddPair('tipo', 'texto');
-    Result.AddPair('dados', LText);
+    Result.AddPair('type', 'text');
+    Result.AddPair('data', LText);
   end
   else
     Result := LParsed as TJSONObject;
 end;
 
-function TClaude.Enviar(const APrompt: string): TJSONObject;
+function TClaude.Send(const APrompt: string): TJSONObject;
 var
   LBody: TJSONObject;
   LResp: IResponse;
@@ -138,7 +138,7 @@ begin
       .Accept('application/json').AddBody(LBody.ToJSON).Post;
 
     if LResp.StatusCode <> 200 then
-      raise Exception.CreateFmt('Erro na API do Claude [HTTP %d]: %s',
+      raise Exception.CreateFmt('Claude API error [HTTP %d]: %s',
         [LResp.StatusCode, LResp.Content]);
 
     LRespJson := TJSONObject.ParseJSONValue

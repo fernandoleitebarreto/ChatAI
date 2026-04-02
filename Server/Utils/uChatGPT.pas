@@ -25,7 +25,7 @@ type
     procedure AddUser(const Content: string);
     procedure AddAssistant(const Content: string);
 
-    // Retorna o conteúdo da resposta do assistant e, opcionalmente, o JSON bruto
+    // Returns the assistant response content and, optionally, the raw JSON
     function Send(out RawJSON: string): string; overload;
     function Send: string; overload;
 
@@ -41,29 +41,28 @@ const
 
 
 {
--- PARAMETRO TEMPERATURE -------------------------------------------------------
-Vai de 0 a 2. Onde:
-Valores mais baixos (0.0 a 0.3): Use quando você quer respostas claras
-e consistentes, como em situações que exigem precisão ou informações técnicas.
+-- TEMPERATURE PARAMETER -------------------------------------------------------
+Ranges from 0 to 2:
+Lower values (0.0 to 0.3): Use when you want clear and consistent responses,
+such as situations requiring precision or technical information.
 
-Valores médios (0.4 a 0.7): Proporcionam um bom equilíbrio entre criatividade
-e previsibilidade, útil para a maioria das aplicações, como artigos ou respostas
-de suporte.
+Medium values (0.4 to 0.7): Provide a good balance between creativity and
+predictability, useful for most applications like articles or support responses.
 
-Valores mais altos (0.8 a 1.0): Ideais para quando você deseja que o modelo
-seja mais exploratório e menos restrito, útil para tarefas como geração
-de poesia, ficção, ou ideias criativas.
+Higher values (0.8 to 1.0): Ideal when you want the model to be more
+exploratory and less constrained, useful for tasks like poetry, fiction,
+or creative idea generation.
 
 
--- PARAMETRO MAXTOKENS  --------------------------------------------------------
-O parametro max_tokens define o máximo de tokens que a resposta da API pode conter.
-Um token é um pedaço de texto (geralmente 3–4 caracteres em média).
+-- MAXTOKENS PARAMETER ---------------------------------------------------------
+The max_tokens parameter defines the maximum number of tokens the API response
+can contain. A token is a piece of text (typically 3-4 characters on average).
 
-Respostas curtas (ex: título, frase): max_tokens = 50–100
-Respostas médias (ex: parágrafo, resumo): max_tokens = 200–400
-Respostas longas (ex: texto, código): max_tokens = 1000–2000
+Short responses (e.g. title, sentence): max_tokens = 50-100
+Medium responses (e.g. paragraph, summary): max_tokens = 200-400
+Long responses (e.g. text, code): max_tokens = 1000-2000
 
-Se deixar 0, nenhum limite será utilizado
+If set to 0, no limit will be applied.
 }
 
 constructor TChatGPT.Create(const AApiKey, AModel: string);
@@ -72,7 +71,7 @@ begin
   FApiKey := AApiKey;
   FModel := AModel;
   FTemperature := 0.7;
-  FMaxTokens := 0;            // 0 = não envia o campo
+  FMaxTokens := 0;            // 0 = field is omitted
   FMessages := TJSONArray.Create;
 end;
 
@@ -124,11 +123,11 @@ begin
   try
     body.AddPair('model', FModel);
 
-    // Clona o array de mensagens para evitar que o Free do body libere FMessages
+    // Clone the messages array so that freeing body does not free FMessages
     msgsClone := FMessages.Clone as TJSONValue;
     body.AddPair('messages', msgsClone);
 
-    // Campos opcionais
+    // Optional fields
     if FTemperature >= 0 then
       body.AddPair('temperature', TJSONNumber.Create(FTemperature));
     if FMaxTokens > 0 then
@@ -136,7 +135,7 @@ begin
 
     Result := body.ToJSON;
   finally
-    body.Free; // msgsClone é liberado aqui, o FMessages original permanece
+    body.Free; // msgsClone is freed here; the original FMessages remains
   end;
 end;
 
@@ -177,20 +176,20 @@ begin
     JO := TJSONObject(TJSONObject.ParseJSONValue(SResp));
     try
       if not Assigned(JO) then
-        raise Exception.Create('Resposta JSON inválida');
+        raise Exception.Create('Invalid JSON response');
 
       Choices := JO.GetValue('choices') as TJSONArray;
       if (Choices = nil) or (Choices.Count = 0) then
-        raise Exception.Create('Sem choices na resposta');
+        raise Exception.Create('No choices in response');
 
       Choice := Choices.Items[0] as TJSONObject;
       Msg := Choice.GetValue('message') as TJSONObject;
       if (Msg = nil) or (Msg.GetValue('content') = nil) then
-        raise Exception.Create('Resposta sem message.content');
+        raise Exception.Create('Response missing message.content');
 
       Result := Msg.GetValue('content').Value;
 
-      // Opcional: já adiciona a resposta ao histórico
+      // Optional: automatically add the response to the conversation history
       AddAssistant(Result);
     finally
       JO.Free;

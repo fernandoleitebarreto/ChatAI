@@ -134,8 +134,8 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="UnitIA.pas">
-            <Form>FrmIA</Form>
+        <DCCReference Include="UnitAI.pas">
+            <Form>FrmAI</Form>
             <FormType>fmx</FormType>
         </DCCReference>
         <DCCReference Include="Utils\uLoading.pas"/>

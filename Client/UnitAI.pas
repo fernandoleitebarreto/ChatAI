@@ -1,4 +1,4 @@
-unit UnitIA;
+unit UnitAI;
 
 interface
 
@@ -10,7 +10,7 @@ uses
   FMX.TabControl, uLoading, RESTRequest4D, System.JSON;
 
 type
-  TFrmIA = class(TForm)
+  TFrmAI = class(TForm)
     TabControl: TTabControl;
     TabItem1: TTabItem;
     Layout1: TLayout;
@@ -48,13 +48,13 @@ type
   end;
 
 var
-  FrmIA: TFrmIA;
+  FrmAI: TFrmAI;
 
 implementation
 
 {$R *.fmx}
 
-procedure TFrmIA.ProcessAnalysis(const APrompt: string);
+procedure TFrmAI.ProcessAnalysis(const APrompt: string);
 var
   LResp: IResponse;
   LJson: TJSONObject;
@@ -82,12 +82,12 @@ begin
   end;
 end;
 
-procedure TFrmIA.SpeedButton1Click(Sender: TObject);
+procedure TFrmAI.SpeedButton1Click(Sender: TObject);
 begin
   TabControl.GotoVisibleTab(0);
 end;
 
-procedure TFrmIA.PopulateGrid(AGrid: TStringGrid; AData: TJSONArray);
+procedure TFrmAI.PopulateGrid(AGrid: TStringGrid; AData: TJSONArray);
 var
   i, j : Integer;
   LObj : TJSONObject;
@@ -130,7 +130,7 @@ begin
   end;
 end;
 
-procedure TFrmIA.OnAnalysisComplete(Sender: TObject);
+procedure TFrmAI.OnAnalysisComplete(Sender: TObject);
 begin
   TLoading.Hide;
 
@@ -153,9 +153,9 @@ begin
   end;
 end;
 
-procedure TFrmIA.btnSendClick(Sender: TObject);
+procedure TFrmAI.btnSendClick(Sender: TObject);
 begin
-  TLoading.Show(FrmIA);
+  TLoading.Show(FrmAI);
 
   TLoading.ExecuteThread(
     procedure
@@ -166,12 +166,12 @@ begin
   );
 end;
 
-procedure TFrmIA.btnBack1Click(Sender: TObject);
+procedure TFrmAI.btnBack1Click(Sender: TObject);
 begin
   TabControl.GotoVisibleTab(0);
 end;
 
-procedure TFrmIA.FormShow(Sender: TObject);
+procedure TFrmAI.FormShow(Sender: TObject);
 begin
   TabControl.ActiveTab := TabItem1;
 end;

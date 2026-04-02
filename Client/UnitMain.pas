@@ -10,8 +10,8 @@ type
   TForm1 = class(TForm)
     Rectangle1: TRectangle;
     Image1: TImage;
-    img_ia: TImage;
-    procedure img_iaClick(Sender: TObject);
+    img_ai: TImage;
+    procedure img_aiClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -25,11 +25,11 @@ implementation
 
 {$R *.fmx}
 
-uses UnitIA;
+uses UnitAI;
 
-procedure TForm1.img_iaClick(Sender: TObject);
+procedure TForm1.img_aiClick(Sender: TObject);
 begin
-  FrmIA.show;
+  FrmAI.show;
 end;
 
 end.
