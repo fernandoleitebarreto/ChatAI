@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-ChatAI is a standalone AI-powered chat assistant for the WolfePak ERP system. It is a Delphi project group (`ChatAI.groupproj`) with two sub-projects:
+ChatAI is a standalone AI-powered chat assistant for the ERP system. It is a Delphi project group (`ChatAI.groupproj`) with two sub-projects:
 
 1. **Client** (`Client/ERP.dproj`) — FMX (FireMonkey) desktop app that provides a chat UI
 2. **Server** (`Server/Server.dpr`) — VCL HTTP server (Horse framework) that proxies AI requests
