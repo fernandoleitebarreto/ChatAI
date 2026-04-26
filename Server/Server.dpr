@@ -10,7 +10,8 @@ uses
   uAIProvider in 'Utils\uAIProvider.pas',
   uAIModels in 'Utils\uAIModels.pas',
   uChatGPTProvider in 'Utils\uChatGPTProvider.pas',
-  uClaudeProvider in 'Utils\uClaudeProvider.pas';
+  uClaudeProvider in 'Utils\uClaudeProvider.pas',
+  uQwenProvider in 'Utils\uQwenProvider.pas';
 
 {$R *.res}
 

@@ -72,7 +72,7 @@ type
 implementation
 
 uses
-  uChatGPTProvider, uClaudeProvider;
+  uChatGPTProvider, uClaudeProvider, uQwenProvider;
 
 const
   // Shared system prompt: instructs any LLM to return JSON in the format
@@ -198,6 +198,7 @@ begin
   case AType of
     aptChatGPT: Result := TChatGPTProvider.Create(AApiKey);
     aptClaude : Result := TClaudeProvider.Create(AApiKey);
+    aptQwen   : Result := TQwenProvider.Create(AApiKey);
   else
     raise Exception.Create('Unknown AI provider type.');
   end;

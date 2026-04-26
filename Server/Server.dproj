@@ -59,8 +59,8 @@
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
-        <DCC_DcuOutput>.\$(Platform)\$(Config)</DCC_DcuOutput>
-        <DCC_ExeOutput>.\$(Platform)\$(Config)</DCC_ExeOutput>
+        <DCC_DcuOutput>.\dcu</DCC_DcuOutput>
+        <DCC_ExeOutput>.</DCC_ExeOutput>
         <DCC_E>false</DCC_E>
         <DCC_N>false</DCC_N>
         <DCC_S>false</DCC_S>
@@ -141,6 +141,7 @@
         <DCCReference Include="Utils\uAIModels.pas"/>
         <DCCReference Include="Utils\uChatGPTProvider.pas"/>
         <DCCReference Include="Utils\uClaudeProvider.pas"/>
+        <DCCReference Include="Utils\uQwenProvider.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -167,7 +168,7 @@
                 </Excluded_Packages>
             </Delphi.Personality>
             <Deployment Version="4">
-                <DeployFile LocalName="Win32\Debug\Server.exe" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="Server.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>Server.exe</RemoteName>
                         <Overwrite>true</Overwrite>

@@ -1,12 +1,15 @@
 unit uAIModels;
+
 interface
+
 uses
   System.SysUtils;
+
 type
   // ---------------------------------------------------------------------------
   // Provider type enum and helper
   // ---------------------------------------------------------------------------
-  TAIProviderType = (aptChatGPT, aptClaude);
+  TAIProviderType = (aptChatGPT, aptClaude, aptQwen);
   TAIProviderTypeHelper = record helper for TAIProviderType
     function Name: string;
     function BaseURL: string;
@@ -14,7 +17,6 @@ type
     function DefaultModel: string;
     function DefaultTokens: Integer;
     function ApiVersion: string;
-    class function Default: TAIProviderType; static;
     class function FromName(const AName: string): TAIProviderType; static;
   end;
 
@@ -40,6 +42,17 @@ type
     class function FromApiName(const AName: string): TClaudeModel; static;
   end;
 
+  // ---------------------------------------------------------------------------
+  // Qwen (Alibaba Cloud / DashScope) models
+  // ---------------------------------------------------------------------------
+  TQwenModel = (qmQwen3_6_plus);
+  TQwenModelHelper = record helper for TQwenModel
+    function Name: string;
+    function ApiName: string;
+    class function Default: TQwenModel; static;
+    class function FromApiName(const AName: string): TQwenModel; static;
+  end;
+
 implementation
 
 { TAIProviderTypeHelper }
@@ -48,8 +61,7 @@ begin
   case Self of
     aptChatGPT: Result := 'ChatGPT';
     aptClaude : Result := 'Claude';
-  else
-    Result := 'Unknown';
+    aptQwen   : Result := 'Qwen';
   end;
 end;
 
@@ -58,6 +70,7 @@ begin
   case Self of
     aptChatGPT: Result := 'https://api.openai.com';
     aptClaude : Result := 'https://api.anthropic.com';
+    aptQwen   : Result := 'https://openrouter.ai/api';
   else
     Result := '';
   end;
@@ -68,23 +81,18 @@ begin
   case Self of
     aptChatGPT: Result := 'v1/chat/completions';
     aptClaude : Result := 'v1/messages';
+    aptQwen   : Result := 'v1/chat/completions';
   else
     Result := '';
   end;
 end;
 
-class function TAIProviderTypeHelper.Default: TAIProviderType;
-begin
-  Result := aptClaude;
-end;
-
 function TAIProviderTypeHelper.DefaultModel: string;
 begin
   case Self of
-    aptChatGPT: Result := TChatGPTModel.Default.ApiName;
-    aptClaude : Result := TClaudeModel.Default.ApiName;
-  else
-    Result := '';
+    aptChatGPT: Result := TChatGPTModel.cgmGPT4o.ApiName;
+    aptClaude : Result := TClaudeModel.cmSonnet46.ApiName;
+    aptQwen   : Result := TQwenModel.qmQwen3_6_plus.ApiName;
   end;
 end;
 
@@ -108,6 +116,8 @@ begin
     then Result := aptChatGPT
   else if SameText(AName, 'Claude')
     then Result := aptClaude
+  else if SameText(AName, 'Qwen')
+    then Result := aptQwen
   else
     raise Exception.CreateFmt('Unknown AI provider name: "%s"', [AName]);
 end;
@@ -194,6 +204,39 @@ begin
     then Result := cmHaiku45
   else
     raise Exception.CreateFmt('Unknown Claude model: "%s"', [AName]);
+end;
+
+{ TQwenModelHelper }
+function TQwenModelHelper.Name: string;
+begin
+  case Self of
+    qmQwen3_6_plus : Result := 'Qwen 3.6 Plus';
+  else
+    Result := 'Unknown';
+  end;
+end;
+
+function TQwenModelHelper.ApiName: string;
+begin
+  // OpenRouter model ID
+  case Self of
+    qmQwen3_6_plus : Result := 'qwen/qwen3.6-plus:free';
+  else
+    Result := '';
+  end;
+end;
+
+class function TQwenModelHelper.Default: TQwenModel;
+begin
+  Result := qmQwen3_6_plus;
+end;
+
+class function TQwenModelHelper.FromApiName(const AName: string): TQwenModel;
+begin
+  if SameText(AName, 'qwen/qwen3.6-plus:free')
+    then Result := qmQwen3_6_plus
+  else
+    raise Exception.CreateFmt('Unknown Qwen model: "%s"', [AName]);
 end;
 
 end.
